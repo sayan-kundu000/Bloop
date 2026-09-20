@@ -441,17 +441,26 @@ class BenchmarkRunner:
             sim_h = classical_weight * sim_c + quantum_weight * sim_q
             y_pred_h.append(round(sim_h, 4))
 
+        def _safe_corr(a, b) -> float:
+            if len(a) <= 1:
+                return 0.0
+            with np.errstate(divide='ignore', invalid='ignore'):
+                val = np.corrcoef(a, b)[0, 1]
+            if np.isnan(val) or np.isinf(val):
+                return 0.0
+            return round(float(val), 4)
+
         mae_c = round(float(mean_absolute_error(y_true, y_pred_c)), 4)
         rmse_c = round(float(np.sqrt(mean_squared_error(y_true, y_pred_c))), 4)
-        corr_c = round(float(np.corrcoef(y_true, y_pred_c)[0, 1]), 4) if len(y_true) > 1 else 0.0
+        corr_c = _safe_corr(y_true, y_pred_c)
 
         mae_q = round(float(mean_absolute_error(y_true, y_pred_q)), 4)
         rmse_q = round(float(np.sqrt(mean_squared_error(y_true, y_pred_q))), 4)
-        corr_q = round(float(np.corrcoef(y_true, y_pred_q)[0, 1]), 4) if len(y_true) > 1 else 0.0
+        corr_q = _safe_corr(y_true, y_pred_q)
 
         mae_h = round(float(mean_absolute_error(y_true, y_pred_h)), 4)
         rmse_h = round(float(np.sqrt(mean_squared_error(y_true, y_pred_h))), 4)
-        corr_h = round(float(np.corrcoef(y_true, y_pred_h)[0, 1]), 4) if len(y_true) > 1 else 0.0
+        corr_h = _safe_corr(y_true, y_pred_h)
 
         c_metrics = BenchmarkMetrics(
             mae=mae_c,

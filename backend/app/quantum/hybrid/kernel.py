@@ -31,10 +31,15 @@ class QuantumKernelEngine:
             return self._kernel
 
         try:
-            from qiskit.circuit.library import zz_feature_map
+            try:
+                from qiskit.circuit.library import ZZFeatureMap
+                feature_map = ZZFeatureMap(feature_dimension=self.num_qubits, reps=self.reps)
+            except (ImportError, AttributeError):
+                from qiskit.circuit.library import zz_feature_map
+                feature_map = zz_feature_map(feature_dimension=self.num_qubits, reps=self.reps)
+
             from qiskit_machine_learning.kernels import FidelityStatevectorKernel
 
-            feature_map = zz_feature_map(feature_dimension=self.num_qubits, reps=self.reps)
             self._kernel = FidelityStatevectorKernel(feature_map=feature_map)
             return self._kernel
         except Exception as e:

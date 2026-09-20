@@ -46,6 +46,17 @@ TEMPLATES: Dict[str, Dict] = {
         "expected_support": ["0", "1"],
         "analytical_probabilities": {"0": 0.5, "1": 0.5},
     },
+    "single_qubit_x": {
+        "id": "single_qubit_x",
+        "name": "Single-Qubit Bit-Flip (|1⟩)",
+        "description": "Applies a Pauli-X gate to flip |0⟩ to |1⟩.",
+        "qubits": 1,
+        "gates": [
+            GateOperationSchema(gate="x", target=0),
+        ],
+        "expected_support": ["1"],
+        "analytical_probabilities": {"1": 1.0},
+    },
     "superposition_4q": {
         "id": "superposition_4q",
         "name": "4-Qubit Equal Superposition Register",
@@ -122,6 +133,8 @@ class CircuitTemplates:
             clean_id = "ghz_state"
         elif clean_id in ("h", "single_qubit_h", "hadamard", "superposition"):
             clean_id = "hadamard_superposition"
+        elif clean_id in ("x", "single_qubit_x", "not", "bit_flip"):
+            clean_id = "single_qubit_x"
         elif clean_id in ("superposition_4", "superposition_4q"):
             clean_id = "superposition_4q"
         elif clean_id in ("rotation", "rotation_experiment"):
