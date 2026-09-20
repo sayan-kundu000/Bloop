@@ -1,0 +1,17 @@
+graph TD
+    subgraph Server Clean Layering
+        API[api/routes/ - HTTP Perimeter]
+        SVC[services/ - Business Logic Coordination]
+        REPO[repositories/ - Persistence Queries]
+        PROV[providers/ - TTS External Adapters]
+        QTM[quantum/ - Quantum Intelligence]
+        DB[(db/ - PostgreSQL & Session)]
+        EXT[External APIs - ElevenLabs]
+    end
+
+    API --> SVC
+    SVC --> REPO
+    SVC --> PROV
+    SVC --> QTM
+    REPO --> DB
+    PROV --> EXT

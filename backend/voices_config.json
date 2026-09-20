@@ -1,0 +1,4 @@
+{
+  "comment": "Place your custom ElevenLabs voices here. If you have custom ElevenLabs voice IDs, add them here with provider: 'elevenlabs' and is_active: true. The backend dynamically imports these without requiring code changes.",
+  "voices": []
+}

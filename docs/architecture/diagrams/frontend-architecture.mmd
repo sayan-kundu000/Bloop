@@ -1,0 +1,16 @@
+graph TD
+    subgraph Client Application Layering
+        APP[app/ - Composition & Router]
+        PAGES[pages/ - Route Composers]
+        FEAT[features/ - Domain Features]
+        COMP[components/ - UI Primitives & Shell]
+        LIB[lib/ - API Client & Query Keys]
+        STORE[stores/ - Ephemeral UI State]
+    end
+
+    APP --> PAGES
+    PAGES --> FEAT
+    FEAT --> COMP
+    FEAT --> LIB
+    FEAT --> STORE
+    COMP --> LIB

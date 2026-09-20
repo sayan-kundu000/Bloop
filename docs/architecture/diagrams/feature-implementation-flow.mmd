@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor User as User / Client
+    participant UI as React UI Component
+    participant APIClient as lib/api/client.ts
+    participant Route as backend api/routes/
+    participant Service as backend services/
+    participant Repo as backend repositories/
+    participant Prov as backend providers/
+    participant DB as PostgreSQL DB
+
+    User->>UI: Triggers Action (e.g. Synthesize Speech)
+    UI->>APIClient: Calls Typed API Client
+    APIClient->>Route: POST /api/v1/tts (JSON Payload)
+    Route->>Route: Validate Pydantic Schema
+    Route->>Service: invoke generate_speech()
+    Service->>Prov: provider.generate_speech()
+    Prov-->>Service: Return Audio Bytes
+    Service->>Repo: save_generation_record()
+    Repo->>DB: INSERT into speech_generations
+    DB-->>Repo: Confirm Row ID
+    Repo-->>Service: Generation Record
+    Service-->>Route: Return TTS Result DTO
+    Route-->>APIClient: 200 OK + ApiResponse[TTSResult]
+    APIClient-->>UI: Update State & Audio Player

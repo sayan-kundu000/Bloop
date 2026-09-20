@@ -1,0 +1,644 @@
+{
+  "info": {
+    "name": "Bloop AI Text-to-Speech & Quantum Intelligence API",
+    "_postman_id": "bloop-api-v1-collection",
+    "description": "Complete REST API collection for Bloop full-stack application covering Health, Auth, Languages, Voices, Speech Generation, Audio Streaming, History, Favorites, and the 5 Quantum Intelligence Labs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "generation_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"full_name\": \"Demo User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.access_token) {",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Dr. Quantum Engineer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "Get User Preferences",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/me/preferences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "me", "preferences"]
+            }
+          }
+        },
+        {
+          "name": "Update User Preferences",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"theme\": \"dark\",\n  \"audio_speed\": 1.25,\n  \"auto_play\": true,\n  \"default_language_code\": \"en-US\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/me/preferences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "me", "preferences"]
+            }
+          }
+        },
+        {
+          "name": "Logout User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Languages & Voices",
+      "item": [
+        {
+          "name": "Get Languages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/languages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "languages"]
+            }
+          }
+        },
+        {
+          "name": "Get Voices (All or Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/voices?language_code=en-US",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "voices"],
+              "query": [
+                {
+                  "key": "language_code",
+                  "value": "en-US"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register Custom Voice (User Injected)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"voice_id\": \"user-elevenlabs-voice-id\",\n  \"name\": \"Custom Studio Voice\",\n  \"language_code\": \"en-US\",\n  \"gender\": \"female\",\n  \"accent\": \"American\",\n  \"provider\": \"elevenlabs\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/voices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "voices"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Text-to-Speech",
+      "item": [
+        {
+          "name": "Analyze Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Welcome to the Bloop Text-to-Speech and Quantum Intelligence engine.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tts/analyze",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "tts", "analyze"]
+            }
+          }
+        },
+        {
+          "name": "Generate Speech",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.generation_id) {",
+                  "    pm.collectionVariables.set('generation_id', jsonData.data.generation_id.toString());",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello! This is a test speech synthesis from Bloop.\",\n  \"language\": \"en-US\",\n  \"voice_id\": \"dynamic-voice-en-female\",\n  \"speed\": 1.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "tts"]
+            }
+          }
+        },
+        {
+          "name": "Stream Audio (RFC 7233)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Range",
+                "value": "bytes=0-1024",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tts/{{generation_id}}/audio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "tts", "{{generation_id}}", "audio"]
+            }
+          }
+        },
+        {
+          "name": "Download Audio (Attachment)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tts/{{generation_id}}/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "tts", "{{generation_id}}", "download"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "History & Favorites",
+      "item": [
+        {
+          "name": "Get Speech History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/history?page=1&page_size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "history"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Speech History Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/history/{{generation_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "history", "{{generation_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Speech Generation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/history/{{generation_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "history", "{{generation_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"generation_id\": 1,\n  \"label\": \"Important Intro\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "Remove Favorite by ID",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites", "1"]
+            }
+          }
+        },
+        {
+          "name": "Remove Favorite by Generation ID",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites/generation/{{generation_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites", "generation", "{{generation_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Search & Filter Speech History (Favorites Only, Date Range)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/history?search=quantum&language=en-US&favorite=true&sort_by=created_at&order=desc&page=1&page_size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "history"],
+              "query": [
+                { "key": "search", "value": "quantum" },
+                { "key": "language", "value": "en-US" },
+                { "key": "favorite", "value": "true" },
+                { "key": "sort_by", "value": "created_at" },
+                { "key": "order", "value": "desc" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quantum Intelligence",
+      "item": [
+        {
+          "name": "Quantum Text Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Modern variational quantum algorithms on Hilbert state spaces\",\n  \"num_qubits\": 4,\n  \"shots\": 1024\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/quantum/text",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "quantum", "text"]
+            }
+          }
+        },
+        {
+          "name": "Quantum Emotion QNN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"I feel absolutely overjoyed and thrilled by this achievement!\",\n  \"shots\": 1024\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/quantum/emotion",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "quantum", "emotion"]
+            }
+          }
+        },
+        {
+          "name": "Quantum Semantic Overlap",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text_a\": \"Artificial intelligence speech synthesis\",\n  \"text_b\": \"AI voice generation and text audio conversion\",\n  \"num_qubits\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/quantum/semantic",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "quantum", "semantic"]
+            }
+          }
+        },
+        {
+          "name": "Quantum Circuit Lab Execution",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"num_qubits\": 3,\n  \"gates\": [\n    {\"gate\": \"h\", \"target\": 0},\n    {\"gate\": \"cx\", \"control\": 0, \"target\": 1},\n    {\"gate\": \"cx\", \"control\": 1, \"target\": 2}\n  ],\n  \"shots\": 1024,\n  \"noise_level\": 0.02\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/quantum/circuit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "quantum", "circuit"]
+            }
+          }
+        },
+        {
+          "name": "Quantum Benchmarking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dataset_size\": 40,\n  \"test_split\": 0.25,\n  \"num_qubits\": 4,\n  \"shots\": 512\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/quantum/benchmark",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "quantum", "benchmark"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

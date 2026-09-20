@@ -1,0 +1,14 @@
+graph TD
+    subgraph Isolated Quantum Subsystem
+        QSVC[quantum/services/ - Quantum Orchestration]
+        ALGO[quantum/algorithms/ - VQC & Emotion QNN]
+        CIRC[quantum/circuits/ - Parameterized Decision Circuits]
+        SIM[quantum/simulators/ - Qiskit Aer & PennyLane Default Qubit]
+        BENCH[quantum/benchmarks/ - Classical vs Quantum Benchmark]
+    end
+
+    QSVC --> ALGO
+    ALGO --> CIRC
+    CIRC --> SIM
+    BENCH --> SIM
+    BENCH --> ALGO

@@ -1,0 +1,28 @@
+graph TD
+    GH[GitHub Bloop Repository]
+    GH --> FE[frontend/]
+    GH --> BE[backend/]
+    GH --> DOC[docs/]
+    GH --> TST[tests/]
+    GH --> SCR[scripts/]
+    GH --> WKF[.github/workflows/]
+
+    FE --> FE_SRC[src/]
+    FE --> FE_PUB[public/]
+    FE --> FE_TST[tests/]
+
+    BE --> BE_APP[app/]
+    BE --> BE_ALM[alembic/]
+    BE --> BE_TST[tests/]
+
+    DOC --> DOC_ARC[architecture/]
+    DOC --> DOC_DEV[development/]
+    DOC --> DOC_DEP[deployment/]
+
+    TST --> TST_E2E[e2e/]
+    TST --> TST_SMK[smoke/]
+    TST --> TST_FIX[fixtures/]
+
+    SCR --> SCR_DEV[development/]
+    SCR --> SCR_DB[database/]
+    SCR --> SCR_DEP[deployment/]

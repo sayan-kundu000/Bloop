@@ -1,0 +1,29 @@
+graph TD
+    subgraph Strict Allowed Dependency Flow
+        direction TB
+        LAYER1[Presentation Layer: Pages & Components]
+        LAYER2[API Perimeter: Routes & Dependencies]
+        LAYER3[Domain Layer: Services]
+        LAYER4[Adaptation Layer: Repositories & Providers]
+        LAYER5[Infrastructure Layer: DB Engine & External Services]
+        
+        LAYER1 --> LAYER2
+        LAYER2 --> LAYER3
+        LAYER3 --> LAYER4
+        LAYER4 --> LAYER5
+    end
+
+    subgraph Forbidden Inversions
+        direction TB
+        F1[Repository -> Route]
+        F2[Provider -> Route]
+        F3[Quantum -> DB Model]
+        F4[UI Primitive -> Feature]
+    end
+
+    style LAYER1 fill:#1e293b,stroke:#6366f1,stroke-width:2px,color:#fff
+    style LAYER2 fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style LAYER3 fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+    style LAYER4 fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff
+    style LAYER5 fill:#1e293b,stroke:#ef4444,stroke-width:2px,color:#fff
+    style Forbidden Inversions fill:#450a0a,stroke:#dc2626,stroke-width:1px,color:#fca5a5
