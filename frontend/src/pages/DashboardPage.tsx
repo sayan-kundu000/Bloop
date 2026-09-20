@@ -79,9 +79,9 @@ export const DashboardPage: React.FC = () => {
 
   const recentItems = recentHistoryData?.items || [];
   const totalGenerations = recentHistoryData?.total ?? 0;
-  const favoriteItems = (favoritesData?.items || [])
-    .map((fav) => (fav.generation ? { ...fav.generation, is_favorite: true, favorite_id: fav.id } : null))
-    .filter((g): g is SpeechGeneration => g !== null);
+  const favoriteItems: SpeechGeneration[] = (favoritesData?.items || []).flatMap((fav) =>
+    fav.generation ? [{ ...fav.generation, is_favorite: true, favorite_id: fav.id }] : []
+  );
   const totalFavorites = favoritesData?.total ?? 0;
 
   const handleRefreshAll = () => {

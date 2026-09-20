@@ -53,7 +53,6 @@ const mockGeneration: SpeechGeneration = {
   language_code: 'en-US',
   voice_id: 'voice-aria-01',
   voice_name: 'Aria Neural',
-  status: 'completed',
   audio_url: '/api/v1/tts/audio/speech-42.mp3',
   download_url: '/api/v1/tts/download/speech-42.mp3',
   duration_seconds: 3.4,

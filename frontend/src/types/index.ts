@@ -179,6 +179,7 @@ export interface SpeechGeneration {
   language_code: string;
   voice_id: string;
   voice_name?: string;
+  status?: string;
   audio_url: string;
   download_url: string;
   duration_seconds: number;

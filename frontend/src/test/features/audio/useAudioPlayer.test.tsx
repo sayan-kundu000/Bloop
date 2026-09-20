@@ -22,9 +22,9 @@ describe('useAudioPlayer Hook (Prompt 20)', () => {
     pauseMock = vi.fn();
     loadMock = vi.fn();
 
-    window.HTMLMediaElement.prototype.play = playMock;
-    window.HTMLMediaElement.prototype.pause = pauseMock;
-    window.HTMLMediaElement.prototype.load = loadMock;
+    window.HTMLMediaElement.prototype.play = playMock as any;
+    window.HTMLMediaElement.prototype.pause = pauseMock as any;
+    window.HTMLMediaElement.prototype.load = loadMock as any;
   });
 
   afterEach(() => {

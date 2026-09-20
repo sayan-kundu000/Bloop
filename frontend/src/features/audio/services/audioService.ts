@@ -36,7 +36,7 @@ export const audioService = {
       });
 
       const blob = new Blob([response.data], {
-        type: response.headers['content-type'] || 'audio/mpeg',
+        type: (response.headers['content-type'] as string) || 'audio/mpeg',
       });
 
       const objectUrl = window.URL.createObjectURL(blob);
