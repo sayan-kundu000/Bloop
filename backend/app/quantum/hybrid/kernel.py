@@ -13,6 +13,37 @@ from backend.app.quantum.exceptions import InvalidQuantumRequestException, Quant
 from backend.app.quantum.hybrid.encoder import QuantumFeatureEncoder
 
 
+class _DirectStatevectorKernel:
+    """Direct Statevector fidelity kernel fallback for exact state transition simulation."""
+
+    def __init__(self, feature_map):
+        self.feature_map = feature_map
+
+    def evaluate(self, x_vec: np.ndarray, y_vec: Optional[np.ndarray] = None) -> np.ndarray:
+        from qiskit.quantum_info import Statevector
+
+        sv_x = [Statevector.from_instruction(self.feature_map.assign_parameters(row)) for row in x_vec]
+        if y_vec is None:
+            n = len(sv_x)
+            matrix = np.zeros((n, n), dtype=float)
+            for i in range(n):
+                matrix[i, i] = 1.0
+                for j in range(i + 1, n):
+                    fid = abs(np.vdot(sv_x[i].data, sv_x[j].data)) ** 2
+                    matrix[i, j] = fid
+                    matrix[j, i] = fid
+            return matrix
+        else:
+            sv_y = [Statevector.from_instruction(self.feature_map.assign_parameters(row)) for row in y_vec]
+            n_x = len(sv_x)
+            n_y = len(sv_y)
+            matrix = np.zeros((n_x, n_y), dtype=float)
+            for i in range(n_x):
+                for j in range(n_y):
+                    matrix[i, j] = abs(np.vdot(sv_x[i].data, sv_y[j].data)) ** 2
+            return matrix
+
+
 class QuantumKernelEngine:
     """
     Qiskit Machine Learning Quantum Kernel Engine.
@@ -38,9 +69,12 @@ class QuantumKernelEngine:
                 from qiskit.circuit.library import zz_feature_map
                 feature_map = zz_feature_map(feature_dimension=self.num_qubits, reps=self.reps)
 
-            from qiskit_machine_learning.kernels import FidelityStatevectorKernel
+            try:
+                from qiskit_machine_learning.kernels import FidelityStatevectorKernel
+                self._kernel = FidelityStatevectorKernel(feature_map=feature_map)
+            except Exception:
+                self._kernel = _DirectStatevectorKernel(feature_map=feature_map)
 
-            self._kernel = FidelityStatevectorKernel(feature_map=feature_map)
             return self._kernel
         except Exception as e:
             raise QuantumExecutionError(f"Failed to initialize Qiskit Machine Learning kernel: {e}")
